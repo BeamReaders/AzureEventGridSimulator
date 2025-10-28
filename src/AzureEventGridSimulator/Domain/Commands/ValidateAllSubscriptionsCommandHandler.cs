@@ -62,16 +62,16 @@ public class ValidateAllSubscriptionsCommandHandler : IRequestHandler<ValidateAl
                 Id = Guid.NewGuid().ToString(),
                 Subject = "",
                 MetadataVersion = "1",
-                Data = new SubscriptionValidationRequest
+                Data = JsonConvert.SerializeObject(new SubscriptionValidationRequest
                 {
                     ValidationCode = subscription.ValidationCode,
                     ValidationUrl = $"https://{_validationIpAddress}:{topic.Port}/validate?id={subscription.ValidationCode}"
-                }
+                })
             };
 
             var json = JsonConvert.SerializeObject(new[] { evt }, Formatting.Indented);
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
-            using var httpClient = _httpClientFactory.CreateClient();
+            using var httpClient = _httpClientFactory.CreateClient(nameof(AzureEventGridSimulator));
             httpClient.DefaultRequestHeaders.Add(Constants.AegEventTypeHeader, Constants.ValidationEventType);
             httpClient.DefaultRequestHeaders.Add(Constants.AegSubscriptionNameHeader, subscription.Name.ToUpperInvariant());
             httpClient.DefaultRequestHeaders.Add(Constants.AegDataVersionHeader, evt.DataVersion);

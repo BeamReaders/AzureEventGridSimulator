@@ -100,7 +100,7 @@ public class SendNotificationEventsToSubscriberCommandHandler : IRequestHandler<
                 {
                     var json = JsonConvert.SerializeObject(new[] { evt }, Formatting.Indented);
                     using var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var httpClient = _httpClientFactory.CreateClient();
+                    var httpClient = _httpClientFactory.CreateClient(nameof(AzureEventGridSimulator));
                     httpClient.DefaultRequestHeaders.Add(Constants.AegEventTypeHeader, Constants.NotificationEventType);
                     httpClient.DefaultRequestHeaders.Add(Constants.AegSubscriptionNameHeader, subscription.Name.ToUpperInvariant());
                     httpClient.DefaultRequestHeaders.Add(Constants.AegDataVersionHeader, evt.DataVersion);

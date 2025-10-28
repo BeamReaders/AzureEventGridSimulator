@@ -26,7 +26,8 @@ public class EventGridEvent
     /// Gets or sets event data specific to the event type.
     /// </summary>
     [DataMember(Name = "data")]
-    public object Data { get; set; }
+    [JsonConverter(typeof(RawJsonConverter))]
+    public string Data { get; set; }
 
     /// <summary>
     /// Gets or sets the type of the event that occurred.

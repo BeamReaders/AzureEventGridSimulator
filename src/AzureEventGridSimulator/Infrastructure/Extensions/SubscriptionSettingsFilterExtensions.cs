@@ -2,6 +2,7 @@
 using System.Linq;
 using AzureEventGridSimulator.Domain.Entities;
 using AzureEventGridSimulator.Infrastructure.Settings;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace AzureEventGridSimulator.Infrastructure.Extensions;
@@ -186,7 +187,7 @@ public static class SubscriptionSettingsFilterExtensions
                             // look for the property on the grid event data object
                             if (tmpValue != null && JObject.FromObject(tmpValue).TryGetValue(split[i], out var dataValue))
                             {
-                                tmpValue = dataValue.ToObject<object>();
+                                tmpValue = JsonConvert.SerializeObject(dataValue);
                                 if (i == split.Length - 1)
                                 {
                                     retval = true;
